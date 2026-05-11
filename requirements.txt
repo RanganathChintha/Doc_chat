@@ -1,0 +1,13 @@
+langchain
+streamlit
+huggingface_hub
+transformers
+torch
+sentence-transformers
+faiss-cpu
+openai
+python-dotenv
+pydantic
+pdfplumber
+Pillow
+chromadb
