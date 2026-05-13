@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Dict
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from config import ChunkingConfig
 import logging
 
@@ -57,8 +57,17 @@ class MultimodalChunker:
         images = page_data["images"]
         page_num = page_data["page"]
         
-        # Split text into chunks
-        text_chunks = self.text_splitter.split_text(text)
+        # Split text into chunks. For scanned/image-only pages, keep a page-level
+        # placeholder so downstream embedding/vector storage never receives empty input.
+        text_chunks = self.text_splitter.split_text(text) if text.strip() else []
+        if not text_chunks and images:
+            text_chunks = [
+                f"Page {page_num + 1} contains {len(images)} extracted image(s), but no extractable text."
+            ]
+        elif not text_chunks:
+            text_chunks = [
+                f"Page {page_num + 1} has no extractable text or embedded images. OCR may be required."
+            ]
         
         page_chunks = []
         num_chunks = len(text_chunks)

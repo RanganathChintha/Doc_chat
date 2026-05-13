@@ -45,8 +45,16 @@ class DocumentParser:
                     img_path = self.output_dir / img_filename
                     pix.save(str(img_path))
                     
-                    # Get bounding box
-                    img_bbox = page.get_image_bbox(img_ref)
+                    # Some PDFs expose image xrefs that do not have a page rectangle.
+                    # Keep the extracted image and leave bbox empty instead of dropping the page.
+                    img_rects = page.get_image_rects(img_ref)
+                    if img_rects:
+                        img_bbox = img_rects[0]
+                    else:
+                        logger.warning(
+                            f"No bounding box found for image {img_index} on page {page_num}"
+                        )
+                        img_bbox = None
                     
                     images_list.append({
                         "path": str(img_path),

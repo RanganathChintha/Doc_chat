@@ -15,7 +15,7 @@ CHROMA_DB_DIR.mkdir(parents=True, exist_ok=True)
 # Model configurations
 class EmbeddingConfig:
     """Embedding model settings"""
-    STRATEGY = "clip"  # Options: "clip", "hybrid", "concatenate"
+    STRATEGY = "concatenate"  # Options: "clip", "hybrid", "concatenate"
     TEXT_MODEL = "all-MiniLM-L6-v2"
     VISION_MODEL = "openai/clip-vit-base-patch32"
     DEVICE = "cuda"  # or "cpu"
@@ -35,7 +35,7 @@ class VectorStoreConfig:
 class CaptioningConfig:
     """Image captioning settings"""
     MODEL = "Salesforce/blip-image-captioning-base"
-    ENABLE_CAPTIONS = True
+    ENABLE_CAPTIONS = False
 
 class RAGConfig:
     """RAG retrieval settings"""
